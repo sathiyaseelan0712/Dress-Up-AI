@@ -3,6 +3,9 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const ClothesImage = require("../models/ClothesImage");
 const PersonImage = require("../models/PersonImage");
+const DefaultClothesImage = require('../models/ClothesDefault');
+const DefaultPersonImage = require('../models/PersonDefault');
+
 
 const getUserIdFromToken = (req) => {
   try {
@@ -88,13 +91,16 @@ exports.uploadClothesImage = async (req, res) => {
 exports.getUserClothes = async (req, res) => {
   try {
     const userId = getUserIdFromToken(req);
+    const defaultCloth = await DefaultClothesImage.find();
     const clothesImages = await ClothesImage.find({ userId: userId });
-
-    if (!clothesImages.length) {
+    
+    if (!clothesImages.length && !defaultCloth) {
       return res.status(404).json({ message: "No clothes images found" });
     }
 
-    res.status(200).json(clothesImages);
+    Object.assign(defaultCloth, clothesImages);
+    
+    res.status(200).json(defaultCloth);
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });
   }
@@ -141,12 +147,15 @@ exports.getPersonImages = async (req, res) => {
   try {
     const userId = getUserIdFromToken(req);
     const personImages = await PersonImage.find({ userId: userId });
+    const defaultPerson = await DefaultPersonImage.find();
 
-    if (!personImages.length) {
+    if (!personImages.length && !defaultPerson.length) {
       return res.status(404).json({ message: "No person images found" });
     }
 
-    res.status(200).json(personImages);
+    Object.assign(defaultPerson, personImages);
+
+    res.status(200).json(defaultPerson);
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });
   }

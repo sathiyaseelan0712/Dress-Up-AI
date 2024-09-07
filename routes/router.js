@@ -16,10 +16,8 @@ router.delete('/person/:id', authenticate, userController.deletePersonImageById)
 
 // Admin endpoints
 router.post('/admin/upload/clothes', authenticate, adminController.uploadDefaultClothesImage);
-router.get('/admin/clothes', authenticate, adminController.getDefaultClothesImages);
 router.delete('/admin/clothes/:id', authenticate, adminController.deleteDefaultClothesImageById);
 router.post('/admin/upload/person', authenticate, adminController.uploadDefaultPersonImage);
-router.get('/admin/person', authenticate, adminController.getDefaultPersonImages);
 router.delete('/admin/person/:id', authenticate, adminController.deleteDefaultPersonImageById);
 
 module.exports = router;
