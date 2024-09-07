@@ -17,27 +17,37 @@ const getUserIdFromToken = (req) => {
   }
 };
 
+//getName
+exports.getname = async (req, res) => {
+  try {
+    const userId = getUserIdFromToken(req);
+    const user = await User.findOne({ _id: userId });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ username: user.username , email: user.email});
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+//register
 exports.register = async (req, res) => {
   try {
     const { username, email, password, confirmPassword } = req.body;
-
     if (password !== confirmPassword) {
       return res.status(400).json({ message: "Passwords do not match" });
     }
-
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
     if (existingUser) {
       return res.status(400).json({ message: "User with that email or username already exists" });
     }
-
     const hashedPassword = await bcrypt.hash(password, 10);
-
     const newUser = new User({
       username,
       email,
       password: hashedPassword,
     });
-
     await newUser.save();
     res.status(201).json({ message: "User registered successfully" });
   } catch (err) {
