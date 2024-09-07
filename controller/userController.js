@@ -3,6 +3,14 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const ClothesImage = require("../models/ClothesImage");
 const PersonImage = require("../models/PersonImage");
+const jwt = require('jsonwebtoken');
+
+const getUserIdFromToken = (req) => {
+  const token = req.header('Authorization').replace('Bearer ', '');
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  return decoded.userId;
+};
+
 
 exports.register = async (req, res) => {
   try {
@@ -59,47 +67,106 @@ exports.login = async (req, res) => {
   }
 };
 
-// Upload clothes image
+// User: Upload Clothes Image
 exports.uploadClothesImage = async (req, res) => {
   try {
+    const userId = getUserIdFromToken(req);
     const { imageUrl } = req.body;
-    const clothesImage = new ClothesImage({
-      userId: req.user.userId,
+
+    const clothesImage = new UserClothesImage({
+      userId: userId,
       imageUrl,
     });
+
     await clothesImage.save();
-    res.status(201).json({ message: "Clothes image uploaded successfully" });
+    res.status(201).json({ message: "User clothes image uploaded successfully" });
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-// Upload person image
+// User: Get All Clothes Images
+exports.getClothesImages = async (req, res) => {
+  try {
+    const userId = getUserIdFromToken(req); // Extract userId from token
+    const clothesImages = await UserClothesImage.find({ userId: userId }); // Fetch clothes images of the logged-in user
+
+    if (!clothesImages.length) {
+      return res.status(404).json({ message: "No clothes images found" });
+    }
+
+    res.status(200).json(clothesImages);
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// User: Delete Clothes Image by ID
+exports.deleteClothesImageById = async (req, res) => {
+  try {
+    const userId = getUserIdFromToken(req);
+    const { id } = req.params;
+
+    const image = await UserClothesImage.findOneAndDelete({ _id: id, userId: userId });
+
+    if (!image) {
+      return res.status(404).json({ message: "Clothes image not found" });
+    }
+
+    res.status(200).json({ message: "Clothes image deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// User: Upload Person Image
 exports.uploadPersonImage = async (req, res) => {
   try {
+    const userId = getUserIdFromToken(req);
     const { imageUrl } = req.body;
-    const personImage = new PersonImage({
-      userId: req.user.userId,
+
+    const personImage = new UserPersonImage({
+      userId: userId,
       imageUrl,
     });
+
     await personImage.save();
-    res.status(201).json({ message: "Person image uploaded successfully" });
+    res.status(201).json({ message: "User person image uploaded successfully" });
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-exports.getRecentImages = async (req, res) => {
+// User: Get All Person Images
+exports.getPersonImages = async (req, res) => {
   try {
-    const clothesImages = await ClothesImage.find({ userId: req.user.userId })
-      .sort({ createdAt: -1 })
-      .limit(5);
-    const personImages = await PersonImage.find({ userId: req.user.userId })
-      .sort({ createdAt: -1 })
-      .limit(5);
+    const userId = getUserIdFromToken(req); // Extract userId from token
+    const personImages = await UserPersonImage.find({ userId: userId }); // Fetch person images of the logged-in user
 
-    res.status(200).json({ clothesImages, personImages });
+    if (!personImages.length) {
+      return res.status(404).json({ message: "No person images found" });
+    }
+
+    res.status(200).json(personImages);
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+// User: Delete Person Image by ID
+exports.deletePersonImageById = async (req, res) => {
+  try {
+    const userId = getUserIdFromToken(req);
+    const { id } = req.params;
+    const image = await UserPersonImage.findOneAndDelete({ _id: id, userId: userId });
+
+    if (!image) {
+      return res.status(404).json({ message: "Person image not found" });
+    }
+
+    res.status(200).json({ message: "Person image deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
