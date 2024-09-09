@@ -3,17 +3,16 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const ClothesImage = require("../models/ClothesImage");
 const PersonImage = require("../models/PersonImage");
-const DefaultClothesImage = require('../models/ClothesDefault');
-const DefaultPersonImage = require('../models/PersonDefault');
-
+const DefaultClothesImage = require("../models/ClothesDefault");
+const DefaultPersonImage = require("../models/PersonDefault");
 
 const getUserIdFromToken = (req) => {
   try {
-    const token = req.header('Authorization').replace('Bearer ', '');
+    const token = req.header("Authorization").replace("Bearer ", "");
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     return decoded.userId;
   } catch (err) {
-    throw new Error('Invalid token');
+    throw new Error("Invalid token");
   }
 };
 
@@ -25,7 +24,7 @@ exports.getname = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.status(200).json({ username: user.username , email: user.email});
+    res.status(200).json({ username: user.username, email: user.email });
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });
   }
@@ -40,7 +39,9 @@ exports.register = async (req, res) => {
     }
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
     if (existingUser) {
-      return res.status(400).json({ message: "User with that email or username already exists" });
+      return res
+        .status(400)
+        .json({ message: "User with that email or username already exists" });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({
@@ -72,7 +73,9 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
     res.status(200).json({ message: "Login successful", token });
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });
@@ -91,7 +94,9 @@ exports.uploadClothesImage = async (req, res) => {
     });
 
     await clothesImage.save();
-    res.status(201).json({ message: "User clothes image uploaded successfully" });
+    res
+      .status(201)
+      .json({ message: "User clothes image uploaded successfully" });
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });
   }
@@ -102,15 +107,17 @@ exports.getUserClothes = async (req, res) => {
   try {
     const userId = getUserIdFromToken(req);
     const defaultCloth = await DefaultClothesImage.find();
-    const clothesImages = await ClothesImage.find({ userId: userId });
-    
-    if (!clothesImages.length && !defaultCloth) {
-      return res.status(404).json({ message: "No clothes images found" });
+    let userCloth = [];
+    if (userId) {
+      userCloth = await ClothesImage.find({ userId: userId });
     }
-
-    Object.assign(defaultCloth, clothesImages);
-    
-    res.status(200).json(defaultCloth);
+    if (!userCloth.length) {
+      if (!defaultCloth.length) {
+        return res.status(404).json({ message: "No Image Found" });
+      }
+      return res.status(200).json({ clothes: defaultCloth });
+    }
+    return res.status(200).json({ clothes: userCloth });
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });
   }
@@ -122,7 +129,10 @@ exports.deleteClothesImageById = async (req, res) => {
     const userId = getUserIdFromToken(req);
     const { id } = req.params;
 
-    const image = await ClothesImage.findOneAndDelete({ _id: id, userId: userId });
+    const image = await ClothesImage.findOneAndDelete({
+      _id: id,
+      userId: userId,
+    });
 
     if (!image) {
       return res.status(404).json({ message: "Clothes image not found" });
@@ -146,7 +156,9 @@ exports.uploadPersonImage = async (req, res) => {
     });
 
     await personImage.save();
-    res.status(201).json({ message: "User person image uploaded successfully" });
+    res
+      .status(201)
+      .json({ message: "User person image uploaded successfully" });
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });
   }
@@ -156,16 +168,18 @@ exports.uploadPersonImage = async (req, res) => {
 exports.getPersonImages = async (req, res) => {
   try {
     const userId = getUserIdFromToken(req);
-    const personImages = await PersonImage.find({ userId: userId });
     const defaultPerson = await DefaultPersonImage.find();
-
-    if (!personImages.length && !defaultPerson.length) {
-      return res.status(404).json({ message: "No person images found" });
+    let personImg = [];
+    if (userId) {
+      personImg = await PersonImage.find({ userId: userId });
     }
-
-    Object.assign(defaultPerson, personImages);
-
-    res.status(200).json(defaultPerson);
+    if (!personImg.length) {
+      if (!defaultPerson.length) {
+        return res.status(404).json({ message: "No Image found foe Person" });
+      }
+      return res.status(200).json({ person: defaultPerson });
+    }
+    return res.status(200).json({ person: personImg });
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });
   }
@@ -177,7 +191,10 @@ exports.deletePersonImageById = async (req, res) => {
     const userId = getUserIdFromToken(req);
     const { id } = req.params;
 
-    const image = await PersonImage.findOneAndDelete({ _id: id, userId: userId });
+    const image = await PersonImage.findOneAndDelete({
+      _id: id,
+      userId: userId,
+    });
 
     if (!image) {
       return res.status(404).json({ message: "Person image not found" });
