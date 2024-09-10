@@ -15,14 +15,14 @@ exports.uploadDefaultClothesImage = async (req, res) => {
   }
 };
 // Get All Default Clothes Images
-// exports.getDefaultClothesImages = async (req, res) => {
-//   try {
-//     const clothesImages = await DefaultClothesImage.find();
-//     res.status(200).json(clothesImages);
-//   } catch (err) {
-//     res.status(500).json({ message: "Internal server error" });
-//   }
-// };
+exports.getDefaultClothesImages = async (req, res) => {
+  try {
+    const clothesImages = await DefaultClothesImage.find();
+    res.status(200).json(clothesImages);
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 // Admin: Delete Default Clothes Image by ID
 exports.deleteDefaultClothesImageById = async (req, res) => {
@@ -55,14 +55,14 @@ exports.uploadDefaultPersonImage = async (req, res) => {
 };
 
 // Get All Default Person Images
-// exports.getDefaultPersonImages = async (req, res) => {
-//   try {
-//     const personImages = await DefaultPersonImage.find();
-//     res.status(200).json(personImages);
-//   } catch (err) {
-//     res.status(500).json({ message: "Internal server error" });
-//   }
-// };
+exports.getDefaultPersonImages = async (req, res) => {
+  try {
+    const personImages = await DefaultPersonImage.find();
+    res.status(200).json(personImages);
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 // Admin: Delete Default Person Image by ID
 exports.deleteDefaultPersonImageById = async (req, res) => {
