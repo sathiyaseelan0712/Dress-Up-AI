@@ -2,18 +2,18 @@ const DefaultClothesImage = require('../models/ClothesDefault');
 const DefaultPersonImage = require('../models/PersonDefault');
 
 // Upload Admin Clothes Image
-exports.uploadDefaultClothesImage = async (req, res) => {
-  try {
-    const { imageUrl } = req.body;
-    const defaultClothesImage = new DefaultClothesImage({
-      imageUrl,
-    });
-    await defaultClothesImage.save();
-    res.status(201).json({ message: "Default clothes image uploaded successfully" });
-  } catch (err) {
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
+// exports.uploadDefaultClothesImage = async (req, res) => {
+//   try {
+//     const { imageData } = req.body;
+//     const defaultClothesImage = new DefaultClothesImage({
+//       imageData,
+//     });
+//     await defaultClothesImage.save();
+//     res.status(201).json({ message: "Default clothes image uploaded successfully" });
+//   } catch (err) {
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
 // Get All Default Clothes Images
 exports.getDefaultClothesImages = async (req, res) => {
   try {
@@ -41,18 +41,18 @@ exports.deleteDefaultClothesImageById = async (req, res) => {
   };
 
 // Upload Admin Person Image
-exports.uploadDefaultPersonImage = async (req, res) => {
-  try {
-    const { imageUrl } = req.body;
-    const defaultPersonImage = new DefaultPersonImage({
-      imageUrl,
-    });
-    await defaultPersonImage.save();
-    res.status(201).json({ message: "Default person image uploaded successfully" });
-  } catch (err) {
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
+// exports.uploadDefaultPersonImage = async (req, res) => {
+//   try {
+//     const { imageData } = req.body;
+//     const defaultPersonImage = new DefaultPersonImage({
+//       imageData,
+//     });
+//     await defaultPersonImage.save();
+//     res.status(201).json({ message: "Default person image uploaded successfully" });
+//   } catch (err) {
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
 
 // Get All Default Person Images
 exports.getDefaultPersonImages = async (req, res) => {

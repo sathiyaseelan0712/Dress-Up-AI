@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const defaultPersonImageSchema = new mongoose.Schema({
   
-  imageUrl: {
+  imageData: {
     type: String,
     required: true,
   },

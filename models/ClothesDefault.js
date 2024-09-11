@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const defaultClothesImageSchema = new mongoose.Schema({
-  imageUrl: {
+  imageData: {
     type: String,
     required: true,
   },
