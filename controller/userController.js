@@ -83,24 +83,24 @@ exports.login = async (req, res) => {
 };
 
 // User: Upload Clothes Image
-// exports.uploadClothesImage = async (req, res) => {
-//   try {
-//     const userId = getUserIdFromToken(req);
-//     const { imageData } = req.body;
+exports.uploadClothesImage = async (req, res) => {
+  try {
+    const userId = getUserIdFromToken(req);
+    const { imageData } = req.body;
 
-//     const clothesImage = new ClothesImage({
-//       userId: userId,
-//       imageData,
-//     });
+    const clothesImage = new ClothesImage({
+      userId: userId,
+      imageData,
+    });
 
-//     await clothesImage.save();
-//     res
-//       .status(201)
-//       .json({ message: "User clothes image uploaded successfully" });
-//   } catch (err) {
-//     res.status(500).json({ message: "Internal server error" });
-//   }
-// };
+    await clothesImage.save();
+    res
+      .status(201)
+      .json({ message: "User clothes image uploaded successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 // User: Get All Clothes Images
 exports.getUserClothes = async (req, res) => {
@@ -145,24 +145,24 @@ exports.deleteClothesImageById = async (req, res) => {
 };
 
 // User: Upload Person Image
-// exports.uploadPersonImage = async (req, res) => {
-//   try {
-//     const userId = getUserIdFromToken(req);
-//     const { imageData } = req.body;
+exports.uploadPersonImage = async (req, res) => {
+  try {
+    const userId = getUserIdFromToken(req);
+    const { imageData } = req.body;
 
-//     const personImage = new PersonImage({
-//       userId: userId,
-//       imageData,
-//     });
+    const personImage = new PersonImage({
+      userId: userId,
+      imageData,
+    });
 
-//     await personImage.save();
-//     res
-//       .status(201)
-//       .json({ message: "User person image uploaded successfully" });
-//   } catch (err) {
-//     res.status(500).json({ message: "Internal server error" });
-//   }
-// };
+    await personImage.save();
+    res
+      .status(201)
+      .json({ message: "User person image uploaded successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 // User: Get All Person Images
 exports.getPersonImages = async (req, res) => {
