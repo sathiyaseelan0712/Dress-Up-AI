@@ -87,11 +87,11 @@ exports.login = async (req, res) => {
 exports.uploadClothesImage = async (req, res) => {
   try {
     const userId = getUserIdFromToken(req);
-    const { imageUrl } = req.body;
+    const { imageData } = req.body;
 
     const clothesImage = new ClothesImage({
       userId: userId,
-      imageUrl,
+      imageData,
     });
 
     await clothesImage.save();
@@ -149,11 +149,11 @@ exports.deleteClothesImageById = async (req, res) => {
 exports.uploadPersonImage = async (req, res) => {
   try {
     const userId = getUserIdFromToken(req);
-    const { imageUrl } = req.body;
+    const { imageData } = req.body;
 
     const personImage = new PersonImage({
       userId: userId,
-      imageUrl,
+      imageData,
     });
 
     await personImage.save();

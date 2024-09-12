@@ -4,9 +4,9 @@ const DefaultPersonImage = require('../models/PersonDefault');
 // Upload Admin Clothes Image
 exports.uploadDefaultClothesImage = async (req, res) => {
   try {
-    const { imageUrl } = req.body;
+    const { imageData } = req.body;
     const defaultClothesImage = new DefaultClothesImage({
-      imageUrl,
+      imageData,
     });
     await defaultClothesImage.save();
     res.status(201).json({ message: "Default clothes image uploaded successfully" });
@@ -43,9 +43,9 @@ exports.deleteDefaultClothesImageById = async (req, res) => {
 // Upload Admin Person Image
 exports.uploadDefaultPersonImage = async (req, res) => {
   try {
-    const { imageUrl } = req.body;
+    const { imageData } = req.body;
     const defaultPersonImage = new DefaultPersonImage({
-      imageUrl,
+      imageData,
     });
     await defaultPersonImage.save();
     res.status(201).json({ message: "Default person image uploaded successfully" });

@@ -7,7 +7,7 @@ const clothesImageSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     }, 
-    imageUrl: { type: String, required: true }, 
+    imageData: { type: String, required: true }, 
   },
   { timestamps: true }
 );
