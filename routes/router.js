@@ -18,6 +18,7 @@ router.delete('/clothes/:id', authenticate, userController.deleteClothesImageByI
 router.post('/upload/person', authenticate, userController.uploadPersonImage);
 router.get('/person', authenticate, userController.getPersonImages);
 router.delete('/person/:id', authenticate, userController.deletePersonImageById);
+router.post('/predict',userController.getPredictionFromModel)
 
 // Admin endpoints
 router.post('/admin/upload/clothes', adminController.uploadDefaultClothesImage);

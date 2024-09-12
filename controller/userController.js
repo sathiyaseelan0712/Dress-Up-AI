@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const axios = require('axios');
 const ClothesImage = require("../models/ClothesImage");
 const PersonImage = require("../models/PersonImage");
 const DefaultClothesImage = require("../models/ClothesDefault");
@@ -205,3 +206,22 @@ exports.deletePersonImageById = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+exports.getPredictionFromModel = async(req,res) => {
+  try{
+    const {image, cloth} = req.body;
+    
+    if(!image || !cloth){
+      res.status(500).json({message:"Insufficient data"});
+    }
+    const response = await axios.post('https://glowing-polite-porpoise.ngrok-free.app/change_cloth',{
+      cloth_base64 : cloth,
+      image_base64 : image
+    });
+
+    res.status(200).json({message: "OK", image: response.data})
+  } catch(err){
+    res.status(500).json({message: "internal server error"});
+    console.log(err);
+  }
+}
