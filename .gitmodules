@@ -1,0 +1,6 @@
+[submodule "frontend"]
+	path = frontend
+	url = https://github.com/DressUpAi/frontend
+[submodule "Dress-Up-AI"]
+	path = Dress-Up-AI
+	url = https://github.com/sanjay-29-29/Dress-Up-AI
